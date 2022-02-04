@@ -12,17 +12,30 @@ export default function Form (props) {
       setInterviewer(null);
   };
   
+  // function calls reset when cancel is clicked
   const Cancel = () => {
       Reset();
       props.onCancel();
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.onSave(student, interviewer)
+  }
+
+   // function to check student name
+  function onSave (){
+
+    props.onSave(student,interviewer)
+  }
+
   return ( 
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form onSubmit={event => event.preventDefault()} autoComplete="off">
+        <form  onSubmit={(event)=>handleSubmit(event)} autoComplete="off">
           <input
             className="appointment__create-input text--semi-bold"
-            name="name"
+            name={props.name}
             type="text"
             placeholder="Enter Student Name"
             value={student}
@@ -38,7 +51,7 @@ export default function Form (props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button onClick={Cancel} danger >Cancel</Button>
-          <Button onClick={props.onSave} confirm >Save</Button>
+          <Button onClick={onSave} confirm  onSubmit={event => event.preventDefault()} >Save</Button>
         </section>
       </section>
     </main>
