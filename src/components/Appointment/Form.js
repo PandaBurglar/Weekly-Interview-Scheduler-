@@ -5,7 +5,7 @@ import Button from "components/Button";
 
 export default function Form (props) {
   const [student, setStudent] = useState(props.student || "");
-  const [interviewer, setInterviewer] = useState(props.interviewer || null);
+  const [interviewer, setInterviewer] = useState(props.interviewer && props.interviewer.id || null);
   const [error, setError] = useState("");
 
   const Reset = () => {
@@ -61,8 +61,10 @@ export default function Form (props) {
           <Button onClick={Cancel} danger >Cancel</Button>
           <Button
             confirm  
-            onSubmit={event => event.preventDefault()} 
+            onSubmit={event => handleSubmit(event)} 
             onClick={validate}
+            // check if interviewer is slected 
+            disabled={!interviewer}
             >
               Save
             </Button>
