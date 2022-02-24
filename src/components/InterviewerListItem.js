@@ -9,11 +9,10 @@ export default function InterviewerListItem(props) {
     );
   }
   
-  const interviewerClass = classNames("interviewerClass", {
-    "interviewers__item": true,
-    'interviewers__item--selected': props.selected,
-    "interviewers__item-image": props.avatar
-});
+  const interviewerClass = classNames("interviewers_item", {
+    "interviewers__item--selected": props.selected,
+ });
+
   return(
     <li onClick={props.setInterviewer} className={interviewerClass}>
       <img
