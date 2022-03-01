@@ -28,24 +28,30 @@ export default function useApplicationData(){
     }
   };
   const updateSpots = (weekday, days, variable) => {
-    if (variable === "REMOVE_SPOT") {
-      const updatedStateDayArray = days.map((day) => {
-        return {
-          ...day,
-          spots: spotUpdate(weekday, day, variable),
-        };
-      });
-      return updatedStateDayArray;
-    }
-    if (variable === "ADD_SPOT") {
-      const updatedStateDayArray = days.map((day) => {
-        return {
-          ...day,
-          spots: spotUpdate(weekday, day, variable),
-        };
-      });
-      return updatedStateDayArray;
-    }
+    // if (variable === "REMOVE_SPOT") {
+    //   const updatedStateDayArray = days.map((day) => {
+    //     return {
+    //       ...day,
+    //       spots: spotUpdate(weekday, day, variable),
+    //     };
+    //   });
+    //   return updatedStateDayArray;
+    // }
+    // if (variable === "ADD_SPOT") {
+    //   const updatedStateDayArray = days.map((day) => {
+    //     return {
+    //       ...day,
+    //       spots: spotUpdate(weekday, day, variable),
+    //     };
+    //   });
+    //   return updatedStateDayArray;
+    // }
+
+    const updatedStateDayArray = days.map((day) => { 
+      return { ...day, spots: spotUpdate(weekday, day, variable), 
+      }; 
+    }); 
+    return updatedStateDayArray; 
   };
 
   const setDay = (day) => {
@@ -57,9 +63,9 @@ export default function useApplicationData(){
 
   useEffect(() => {
     Promise.all([
-      axios.get(`http://localhost:8001/api/days`),
-      axios.get(`http://localhost:8001/api/appointments`),
-      axios.get(`http://localhost:8001/api/interviewers`),   
+      axios.get(`/api/days`),
+      axios.get(`/api/appointments`),
+      axios.get(`/api/interviewers`),   
 
     ]).then((all) =>{
       setState(prev => ({
@@ -83,7 +89,7 @@ export default function useApplicationData(){
     };
 
     return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      const spotUpdate = updateSpots(state.day, state.days, "REMOVE_SPOT");
+      const spotUpdate = updateSpots(state.day, state.days);
       setState({
         ...state,
         days: spotUpdate,
@@ -94,7 +100,7 @@ export default function useApplicationData(){
 
   // cancelling appt
   function cancelInterview(appointment) {
-    console.log("try deleting");
+    // console.log("try deleting");
     const deleteAppointment = {
       ...state.appointments[appointment],
       interview: null,
@@ -107,7 +113,7 @@ export default function useApplicationData(){
     return axios
       .delete(`/api/appointments/${appointment}`, deleteAppointment)
       .then(() => {
-        const spotUpdate = updateSpots(state.day, state.days, "ADD_SPOT");
+        const spotUpdate = updateSpots(state.day, state.days);
         setState({
           ...state,
           days: spotUpdate,
