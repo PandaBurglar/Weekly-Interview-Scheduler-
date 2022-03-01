@@ -20,8 +20,8 @@ Testing: Storybook, Webpack Dev Server, Jest, Testing Library and Cypress
 
 6. Days display currently remaining spots and it it updates after each modification
 
+!["Image of blank schedule"](docs/image of blank Schedule.png)
 
-![alt text](image of blank Schedule.png)
 
 ## Setup
 
