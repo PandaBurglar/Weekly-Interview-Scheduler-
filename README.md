@@ -21,7 +21,7 @@ Testing: Storybook, Webpack Dev Server, Jest, Testing Library and Cypress
 6. Days display currently remaining spots and it it updates after each modification
 
 
-[/root/lighthouse/w7/Weekly-Interview-Scheduler-/image of blank Schedule.png]
+![alt text](/root/lighthouse/w7/Weekly-Interview-Scheduler-/image of blank Schedule.png)
 
 ## Setup
 
