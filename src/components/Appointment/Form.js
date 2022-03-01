@@ -27,8 +27,12 @@ export default function Form (props) {
 
     // function to check student name
     function validate() {
-      if (student === "") {
+      if (!student) {
         setError("Student name cannot be blank");
+        return;
+      }
+      if (!interviewer){
+        setError("Please pick an interviewer");
         return;
       }
       setError("");
@@ -64,7 +68,7 @@ export default function Form (props) {
             onSubmit={event => handleSubmit(event)} 
             onClick={validate}
             // check if interviewer is slected 
-            disabled={!interviewer}
+            // disabled={!interviewer}
             >
               Save
             </Button>
