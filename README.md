@@ -39,7 +39,6 @@ npm test
 ```sh
 npm run storybook
 ```
-
 ## Dependencies
 
 - Axios
