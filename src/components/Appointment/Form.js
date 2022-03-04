@@ -5,12 +5,11 @@ import Button from "components/Button";
 
 export default function Form (props) {
   const [student, setStudent] = useState(props.student || "");
-  const [interviewer, setInterviewer] = useState(props.interviewer && props.interviewer.id || null);
+  const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
   const Reset = () => {
       setStudent("");
-      setError("");
       setInterviewer(null);
   };
   
@@ -20,10 +19,10 @@ export default function Form (props) {
       props.onCancel();
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    props.onSave(student, interviewer)
-  }
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   props.onSave(student, interviewer)
+  // }
 
     // function to check student name
     function validate() {
@@ -42,7 +41,7 @@ export default function Form (props) {
   return ( 
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form  onSubmit={(event) => handleSubmit(event)} autoComplete="off">
+        <form  onSubmit={event => event.preventDefault()} autoComplete="off">
           <input
             className="appointment__create-input text--semi-bold"
             name= {props.name}
@@ -65,10 +64,8 @@ export default function Form (props) {
           <Button onClick={Cancel} danger >Cancel</Button>
           <Button
             confirm  
-            onSubmit={event => handleSubmit(event)} 
+            // onSubmit={event => handleSubmit(event)} 
             onClick={validate}
-            // check if interviewer is slected 
-            // disabled={!interviewer}
             >
               Save
             </Button>

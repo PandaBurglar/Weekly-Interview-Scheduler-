@@ -9,51 +9,6 @@ export default function useApplicationData(){
     interviewers: {}
   });
 
-
-   // update spot function 
-   const spotUpdate = (weekday, day, variable) => {
-    let spot = day.spots;
-    if (weekday === day.name && variable === "REMOVE_SPOT") {
-      if (spot === 0){
-        return spot
-      } 
-      return spot - 1;
-    } else if (weekday === day.name && variable === "ADD_SPOT") {
-      if (spot === 5 ){
-        return spot
-      } 
-      return spot + 1;
-    } else {
-      return spot;
-    }
-  };
-  const updateSpots = (weekday, days, variable) => {
-    // if (variable === "REMOVE_SPOT") {
-    //   const updatedStateDayArray = days.map((day) => {
-    //     return {
-    //       ...day,
-    //       spots: spotUpdate(weekday, day, variable),
-    //     };
-    //   });
-    //   return updatedStateDayArray;
-    // }
-    // if (variable === "ADD_SPOT") {
-    //   const updatedStateDayArray = days.map((day) => {
-    //     return {
-    //       ...day,
-    //       spots: spotUpdate(weekday, day, variable),
-    //     };
-    //   });
-    //   return updatedStateDayArray;
-    // }
-
-    const updatedStateDayArray = days.map((day) => { 
-      return { ...day, spots: spotUpdate(weekday, day, variable), 
-      }; 
-    }); 
-    return updatedStateDayArray; 
-  };
-
   const setDay = (day) => {
     setState((prev) => ({
       ...prev,
@@ -77,6 +32,90 @@ export default function useApplicationData(){
     })
   }, []);
 
+
+  // function updateSpots(id, isCreation) {
+  //   //getting the day
+  //   const day = state.days.find(day => day.appointments.includes(id));
+    
+  //   // isCreation is referring to the appointment creation, if booked -1, if cancelled +1
+  //   const newDay = {...day, spots: day.spots + (isCreation ? -1 : 1)}
+    
+  //   const newDaysArr = state.days.map((day)=> {
+  //     if (day.id === newDay.id) {
+  //       return newDay
+  //     } else {
+  //       return day
+  //     }
+  //   })
+  // };
+
+  // spotsRemaining
+  function updateSpots(appointments) {
+
+    const allDays = [...state.days];
+    
+    for (let day of allDays) {
+      if (day.name === state.day) {
+        let availableSpots = 0;
+  
+        for (let appointment of day.appointments) {
+          if (appointments[appointment].interview === null) {
+            availableSpots +=1
+          }
+        }
+        day.spots = availableSpots;
+      }
+    }   
+    return allDays
+  };
+  
+  //  // update spot function 
+  //  const spotUpdate = (weekday, day) => {
+  //   let spot = day.spots;
+  //   if (weekday === day.name) {
+  //     if (spot === 0){
+  //       return spot
+  //     } 
+  //     return spot - 1;
+  //   // } else if (weekday === day.name && variable === "ADD_SPOT") {
+
+  //   } else if (weekday === day.name) {
+  //     if (spot === 5 ){
+  //       return spot
+  //     } 
+  //     return spot + 1;
+  //   } else {
+  //     return spot;
+  //   }
+  // };
+  // const updateSpots = (weekday, days) => {
+  //   // if (variable === "REMOVE_SPOT") {
+  //   //   const updatedStateDayArray = days.map((day) => {
+  //   //     return {
+  //   //       ...day,
+  //   //       spots: spotUpdate(weekday, day, variable),
+  //   //     };
+  //   //   });
+  //   //   return updatedStateDayArray;
+  //   // }
+  //   // if (variable === "ADD_SPOT") {
+  //   //   const updatedStateDayArray = days.map((day) => {
+  //   //     return {
+  //   //       ...day,
+  //   //       spots: spotUpdate(weekday, day, variable),
+  //   //     };
+  //   //   });
+  //   //   return updatedStateDayArray;
+  //   // }
+
+  //   const updatedStateDayArray = days.map((day) => { 
+  //     return { ...day, spots: spotUpdate(weekday, day), 
+  //     }; 
+  //   }); 
+  //   return updatedStateDayArray; 
+  // };
+
+
    // booking interviews
    function bookInterview(id, interview) {
     const appointment = {
@@ -88,12 +127,14 @@ export default function useApplicationData(){
       [id]: appointment,
     };
 
-    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      const spotUpdate = updateSpots(state.day, state.days);
+    return axios.put(`/api/appointments/${id}`, { interview })
+    .then(() => {
+      // const spotUpdate = updateSpots(state.day, state.days);
       setState({
         ...state,
-        days: spotUpdate,
+        // days: spotUpdate,
         appointments,
+        days: updateSpots(appointments),
       });
     });
    };
@@ -113,11 +154,12 @@ export default function useApplicationData(){
     return axios
       .delete(`/api/appointments/${appointment}`, deleteAppointment)
       .then(() => {
-        const spotUpdate = updateSpots(state.day, state.days);
+        // const spotUpdate = updateSpots(state.day, state.days);
         setState({
           ...state,
-          days: spotUpdate,
-          deleteAppointments,
+          // days: spotUpdate,
+          days: updateSpots(deleteAppointments),
+          deleteAppointments
         });
       });
   };
@@ -139,7 +181,7 @@ export default function useApplicationData(){
       `/api/appointments/${appointmentId}`,
       editedAppointments[appointmentId]
     )
-    .then(setState({ ...state, appointments: editedAppointments }));
+    .then(setState({ ...state, days: updateSpots(editedAppointments), editedAppointments }));
   };
 
   

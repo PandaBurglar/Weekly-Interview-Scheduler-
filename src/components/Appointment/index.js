@@ -1,6 +1,7 @@
 import React from "react";
 
 import "components/Appointment/styles.scss";
+import { useState } from "react";
 
 import Header from "./Header";
 import Show from "./Show";
@@ -37,7 +38,7 @@ export default function Appointment (props) {
       student: name,
       interviewer,
     };
-    transition(SAVING), true;
+    transition(SAVING, true);
 
     props.bookInterview(props.id, interview, editing)
     .then(()=> transition(SHOW))
